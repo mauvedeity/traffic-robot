@@ -43,12 +43,12 @@ for more iformation on how to configure Pushover for your requirements.
 ## Chump
 
 Chump is also on github [here](https://github.com/karanlyons/chump).
-It needs two keys to use, which you can get from Pushover. I've removed
-my API keys from this version, you'll need to substute yours in to make
-it work for you.
+It needs two keys to use, which you can get from Pushover. I've
+removed my API keys from this version, you'll need to substitute
+yours in to make it work for you.
 
-I have had some problems with Chump, but then I haven't tested against
-the latest version, so I should probably do that.
+I have had some problems with Chump, but then I haven't tested
+against the latest version, so I should probably do that.
 
 See
 [the instructions in that project](https://github.com/karanlyons/chump).
