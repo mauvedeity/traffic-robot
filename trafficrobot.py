@@ -152,7 +152,6 @@ def test():
   notifyusers("Test", "This is a test message to check that we are working OK", 0)
 
 if __name__ == '__main__':
-  test()
-  # trafficrobot()
-
+  # test()
+  trafficrobot()
 
