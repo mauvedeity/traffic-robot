@@ -1,0 +1,5 @@
+# users file: userkey, device, friendly name (device can be blank)
+# octothorpe on line by itself = comment
+# userkey is the Pushover user API key
+#
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,iPhone,Me
