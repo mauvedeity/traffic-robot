@@ -1,0 +1,6 @@
+# ignore .txt files, as these are live
+*.txt
+
+# ignore .xml files, as these are probably web site data
+*.xml
+
