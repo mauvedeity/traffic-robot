@@ -19,6 +19,9 @@ from chump import Application
 
 ##############################################################################
 
+def global_datasource():
+  return("http://m.highwaysengland.co.uk/feeds/rss/UnplannedEvents/West%20Midlands.xml")
+
 # get current location so that we can look for files in our folder 
 # TODO: fix it so we can use an arbitary r/w path for the guid and download
 # files, r/o path for users (from POV of app we're running as)
@@ -132,7 +135,7 @@ def processitem(anitem):
 
 def trafficrobot():
   # download and parse XML 
-  urllib.request.urlretrieve ("http://m.highways.gov.uk/feeds/rss/UnplannedEvents/West%20Midlands.xml", get_fileloc('DLOAD'))
+  urllib.request.urlretrieve (global_datasource(), get_fileloc('DLOAD'))
   tree = etree.parse(get_fileloc('DLOAD'))	# slurp XML into parser
   root = tree.getroot()				# get root element
   channel = root[0]				# get channel - children of this include item
