@@ -118,7 +118,8 @@ def processitem(anitem):
     cat1 = 'Incident type: ' + anitem.findall('category')[0].text
     cat2 = 'Delay category: ' + anitem.findall('category')[1].text
     description = anitem.findall('description')[0].text
-    msg = cat1 + '\n' + cat2 + '\n' + description + 'GUID: ' + guid + '\n'
+    # msg = cat1 + '\n' + cat2 + '\n' + description + 'GUID: ' + guid + '\n'
+    msg = description + '\n' + cat1 + '\n' + cat2 + 'GUID: ' + guid + '\n'
     # print(msg)
     # check delay and adjust priority as appropriate
     # if cat2 = 'No Delay' or 'Minor Disruption' then leave priority else priority = 1
@@ -136,9 +137,9 @@ def processitem(anitem):
 def trafficrobot():
   # download and parse XML 
   urllib.request.urlretrieve (global_datasource(), get_fileloc('DLOAD'))
-  tree = etree.parse(get_fileloc('DLOAD'))	# slurp XML into parser
-  root = tree.getroot()				# get root element
-  channel = root[0]				# get channel - children of this include item
+  tree = etree.parse(get_fileloc('DLOAD'))  # slurp XML into parser
+  root = tree.getroot()       # get root element
+  channel = root[0]           # get channel - children of this include item
   items = channel.findall('item')
   lastguid = ''
   itemscount = 0
