@@ -14,6 +14,7 @@ import xml.etree.ElementTree as etree
 import urllib
 import urllib.request
 import urllib.parse
+import argparse
 #
 from chump import Application
 
@@ -156,6 +157,13 @@ def test():
   notifyusers("Test", "This is a test message to check that we are working OK", 0)
 
 if __name__ == '__main__':
-  # test()
-  trafficrobot()
+  parser = argparse.ArgumentParser()
+  parser.add_argument('-t', '--test', help='Test communications', action="store_true")
+
+  args = parser.parse_args()
+
+  if args.test:
+    test()
+  if not args.test:
+    trafficrobot()
 
