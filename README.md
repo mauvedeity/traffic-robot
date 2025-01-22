@@ -53,5 +53,6 @@ I have had some problems with Chump, but then I haven't tested
 against the latest version, so I should probably do that.
 
 See
-[the instructions in that project](https://github.com/karanlyons/chump).
-for information on how to set Chump up.
+[the instructions in that project](https://github.com/karanlyons/chump)
+for information on how to set up Chump if `pip install chump` doesn't 
+work for you.
