@@ -103,33 +103,6 @@ def listusers():
   userf.close()
   return(users,devs, names)
 
-def notifyusers(title, msgtext, msgpriority):
-  idx = 0;
-  app = Application(get_appapikey())
-  print ('Application authenticated OK: ',(app.is_authenticated))
-  if(app.is_authenticated):
-    usertokens, devices, friendname = listusers()
-    for usertoken in usertokens:
-      user = app.get_user(usertoken)
-      if(user.is_authenticated):
-        print(user, 'authenticated OK')
-        message = user.create_message(msgtext,
-          # sound = 'incoming', # uncomment for alternate sound, leave for default
-          title = title,
-          device = devices[idx],
-          priority = msgpriority,
-          html = False
-        );
-        message.send()
-        print('Sent: ', message.is_sent, ' ID: ',message.id, ' User: ', friendname[idx]);
-      else:
-        print('fail: ', user, '/', friendname[idx])
-      idx += 1
-    print('Users notified: ', idx)
-    print('Quota: ', app.remaining, '/', app.limit)
-  else:
-    print('App could not authenticate')
-
 def processitem(anitem):
   road = anitem.findall('road')[0].text
   guid = anitem.findall('guid')[0].text
