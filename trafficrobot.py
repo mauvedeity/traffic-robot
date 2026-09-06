@@ -15,27 +15,27 @@ import urllib
 import urllib.request
 import urllib.parse
 import argparse
-#
-# from chump import Application
+import http.client
 
 ##############################################################################
 
-def newnotify(title, msgtext, msgpriority)
+def newnotify(title, msgtext, msgpriority):
 
   APP_TOKEN = get_appapikey()
-  USER_KEY, _, _ = listusers() # this may go wonky if there's more than one user
+  usertokens, _, _ = listusers()
+  USER_KEY = usertokens[0]
 
   conn = http.client.HTTPSConnection("api.pushover.net:443")
   conn.request("POST", "/1/messages.json",
     urllib.parse.urlencode({
       "token": APP_TOKEN,
       "user": USER_KEY,
-      "title": "Traffic Robot",
-      "message": "Tablets!",
+      "title": title,
+      "message": msgtext,
+      "priority": msgpriority,
       "ttl": "60" # 14400 when live
     }), { "Content-type": "application/x-www-form-urlencoded" })
   print(conn.getresponse().status)
-
 
 ##############################################################################
 
@@ -145,10 +145,9 @@ def processitem(anitem):
     # if cat2 = 'No Delay' or 'Minor Disruption' then leave priority else priority = 1
     if(not(('No Delay' in cat2) or ('Minor Disruption' in cat2))):
       priority = 1
-    if('Lane Closures' in description):	# if lane closures, then likely major delay - priority 2 # pri 2 under review
+    if('Lane Closures' in description):
       priority = 1
-    notifyusers(cat1, msg, priority)
-    # 
+    newnotify(cat1, msg, priority)
     print(guid + ' processed')
   else:
     print('Skipping GUID ' + guid)
@@ -173,7 +172,7 @@ def trafficrobot():
     print("Updating GUID " + lastguid)
 
 def test():
-  notifyusers("Test", "This is a test message to check that we are working OK", 0)
+  newnotify("Test", "This is a test message to check that we are working OK", 0)
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
