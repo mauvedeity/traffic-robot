@@ -15,8 +15,27 @@ import urllib
 import urllib.request
 import urllib.parse
 import argparse
-#
-from chump import Application
+import http.client
+
+##############################################################################
+
+def newnotify(title, msgtext, msgpriority):
+
+  APP_TOKEN = get_appapikey()
+  usertokens, _, _ = listusers()
+  USER_KEY = usertokens[0]
+
+  conn = http.client.HTTPSConnection("api.pushover.net:443")
+  conn.request("POST", "/1/messages.json",
+    urllib.parse.urlencode({
+      "token": APP_TOKEN,
+      "user": USER_KEY,
+      "title": title,
+      "message": msgtext,
+      "priority": msgpriority,
+      "ttl": "60" # 14400 when live
+    }), { "Content-type": "application/x-www-form-urlencoded" })
+  print(conn.getresponse().status)
 
 ##############################################################################
 
@@ -84,33 +103,6 @@ def listusers():
   userf.close()
   return(users,devs, names)
 
-def notifyusers(title, msgtext, msgpriority):
-  idx = 0;
-  app = Application(get_appapikey())
-  print ('Application authenticated OK: ',(app.is_authenticated))
-  if(app.is_authenticated):
-    usertokens, devices, friendname = listusers()
-    for usertoken in usertokens:
-      user = app.get_user(usertoken)
-      if(user.is_authenticated):
-        print(user, 'authenticated OK')
-        message = user.create_message(msgtext,
-          # sound = 'incoming', # uncomment for alternate sound, leave for default
-          title = title,
-          device = devices[idx],
-          priority = msgpriority,
-          html = False
-        );
-        message.send()
-        print('Sent: ', message.is_sent, ' ID: ',message.id, ' User: ', friendname[idx]);
-      else:
-        print('fail: ', user, '/', friendname[idx])
-      idx += 1
-    print('Users notified: ', idx)
-    print('Quota: ', app.remaining, '/', app.limit)
-  else:
-    print('App could not authenticate')
-
 def processitem(anitem):
   road = anitem.findall('road')[0].text
   guid = anitem.findall('guid')[0].text
@@ -126,10 +118,9 @@ def processitem(anitem):
     # if cat2 = 'No Delay' or 'Minor Disruption' then leave priority else priority = 1
     if(not(('No Delay' in cat2) or ('Minor Disruption' in cat2))):
       priority = 1
-    if('Lane Closures' in description):	# if lane closures, then likely major delay - priority 2 # pri 2 under review
+    if('Lane Closures' in description):
       priority = 1
-    notifyusers(cat1, msg, priority)
-    # 
+    newnotify(cat1, msg, priority)
     print(guid + ' processed')
   else:
     print('Skipping GUID ' + guid)
@@ -154,7 +145,7 @@ def trafficrobot():
     print("Updating GUID " + lastguid)
 
 def test():
-  notifyusers("Test", "This is a test message to check that we are working OK", 0)
+  newnotify("Test", "This is a test message to check that we are working OK", 0)
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
