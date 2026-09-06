@@ -16,7 +16,26 @@ import urllib.request
 import urllib.parse
 import argparse
 #
-from chump import Application
+# from chump import Application
+
+##############################################################################
+
+def newnotify(title, msgtext, msgpriority)
+
+  APP_TOKEN = get_appapikey()
+  USER_KEY, _, _ = listusers() # this may go wonky if there's more than one user
+
+  conn = http.client.HTTPSConnection("api.pushover.net:443")
+  conn.request("POST", "/1/messages.json",
+    urllib.parse.urlencode({
+      "token": APP_TOKEN,
+      "user": USER_KEY,
+      "title": "Traffic Robot",
+      "message": "Tablets!",
+      "ttl": "60" # 14400 when live
+    }), { "Content-type": "application/x-www-form-urlencoded" })
+  print(conn.getresponse().status)
+
 
 ##############################################################################
 
